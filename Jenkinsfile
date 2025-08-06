@@ -20,11 +20,15 @@ pipeline {
        stage('Commits') {
     steps {
         script {
-            def commits = bat(script: 'git log -2 --pretty=format:"%h - %s by %an"', returnStdout: true).trim()
+            def commits = bat(
+                script: '"C:\\Program Files\\Git\\bin\\git.exe" log -2 --pretty=format:"%h - %s by %an"',
+                returnStdout: true
+            ).trim()
             echo "📝 Recent Commits:\n${commits}"
         }
     }
 }
+
 
     }
 }
