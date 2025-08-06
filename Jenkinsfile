@@ -9,18 +9,18 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'javac helloworld.java'
+                bat 'javac helloworld.java'
             }
         }
         stage('Run') {
             steps {
-                sh 'java helloworld'
+                bat 'java helloworld'
             }
         }
         stage('Commits') {
             steps {
                 script {
-                    def commits = sh(script: "git log -2 --pretty=format:'%h - %s by %an'", returnStdout: true).trim()
+                    def commits = bat(script: 'git log -2 --pretty=format:"%h - %s by %an"', returnStdout: true).trim()
                     echo "📝 Recent Commits:\n${commits}"
                 }
             }
