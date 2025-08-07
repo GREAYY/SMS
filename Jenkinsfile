@@ -1,34 +1,19 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
+        stage('Setup Python') {
             steps {
-                checkout scm
+                sh '''
+                  python3 -m venv venv
+                  . venv/bin/activate
+                  pip install -r requirements.txt
+                '''
             }
         }
-        stage('Build') {
+        stage('Run script') {
             steps {
-                bat 'javac helloworld.java'
+                sh '. venv/bin/activate && python script.py'
             }
         }
-        stage('Run') {
-            steps {
-                bat 'java helloworld'
-            }
-        }
-       stage('Commits') {
-    steps {
-        script {
-            def commits = bat(
-                script: '"C:\\Program Files\\Git\\bin\\git.exe" log -2 --pretty=format:"%h - %s by %an"',
-                returnStdout: true
-            ).trim()
-            echo "📝 Recent Commits:\n${commits}"
-        }
-    }
-}
-
-
     }
 }
