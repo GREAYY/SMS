@@ -1,25 +1,26 @@
 pipeline {
     agent any
-    stages {
-        stage('Setup Python') {
-            steps {
-                sh '''
-                  python3 -m venv venv
-                  . venv/bin/activate
-                  pip install -r requirements.txt
-                '''
-            }
-        }
-        stage('Run script') {
-            steps {
-                sh '. venv/bin/activate && python script.py'
-            }
-        }
-        stage('Test') {
-    steps {
-        sh '. venv/bin/activate && pytest tests/'
-    }
-}
 
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Run Python Script') {
+            steps {
+                sh 'python3 script.py'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build succeeded!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
     }
 }
